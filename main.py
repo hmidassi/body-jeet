@@ -1,4 +1,5 @@
 import kivy
+from dbConnection import dbConnection
 kivy.require('1.10.0')
 
 from kivy.app import App
@@ -11,7 +12,14 @@ class BodyJeet(Widget):
 
 class BodyJeetApp(App):
     def build(self):
-        return Label(text='Salut le monde')
+        connectionManager=dbConnection("dbAppliBodyJeet")
+        conn=connectionManager.createConnection()
+        cursor=connectionManager.createCursor(conn)
+        cursor.execute("SELECT * FROM CATEGORIE_EXERCICE")
+        exercice=""
+        for line in cursor:
+            exercice=exercice+line[1]+"\n"
+        return Label(text=exercice)
 
 app=BodyJeetApp()
 if __name__=='__main__':
